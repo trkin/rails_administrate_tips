@@ -12,7 +12,8 @@ folder so you can see how the spec are written
 bundle add administrate
 
 rails generate administrate:install
-# this will generate dashboard and controller for each existing ApplicationRecord
+# this will generate app/dashboard/name_dashboard.rb and
+# app/controllers/admin/name_controller.rb for each existing ApplicationRecord
 ```
 
 It depends on Spockets so when you are using Propshaft there is an error
