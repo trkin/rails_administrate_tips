@@ -34,10 +34,14 @@ gem "sprockets-rails"
 
 Generate new dashboard pages
 
-~~~
+```
 rails g administrate:dashboard Candidate
+```
+You can overwrite specific views
+
+```
 rails g administrate:views:index Candidate
-~~~
+```
 
 ## Adding custom action
 

@@ -72,3 +72,5 @@ group :test do
 end
 
 gem "administrate", "~> 0.18.0"
+
+gem "standard", "~> 1.25"

@@ -1,0 +1,4 @@
+ignore:
+  - "**/*":
+    # put comma after each line {a:1,}
+    - Style/TrailingCommaInHashLiteral
