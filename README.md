@@ -40,28 +40,40 @@ rails g administrate:dashboard Candidate
 You can overwrite specific views
 
 ```
-rails g administrate:views:index Candidate
+rails g administrate:views
+rails g administrate:views:index # index show edit  new
+rails g administrate:views:index Candidate # only for specific resource
 ```
+or layout
+```
+rails g administrate:views:layout
+rails g administrate:views:navigation # only this partial
+```
+
+* overwrite display name
+  ```
+  # app/dashboards/book_dashboard.rb
+  def display_resource(book)
+    book.name
+  end
+  ```
+* change labels using I18n https://administrate-demo.herokuapp.com/customizing_dashboards
 
 ## Adding custom action
 
-~~~
+```
 # config/routes.rb
   namespace :admin do
-    DashboardManifest::DASHBOARDS.each do |dashboard_resource|
-      resources dashboard_resource
-    end
-
-    root controller: DashboardManifest::ROOT_DASHBOARD, action: :index
     resources :candidates do
       member do
         patch :mark_as_registered
-        get :register
       end
     end
   end
-~~~
+```
 
 In views you can use `[:mark_as_registered, Administrate::NAMESPACE, resource]`
 path or `mark_as_registered_admin_candidate_path`.
 
+TODO:
+https://github.com/ApprenticeshipStandardsDotOrg/ApprenticeshipStandardsDotOrg

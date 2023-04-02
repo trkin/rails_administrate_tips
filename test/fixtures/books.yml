@@ -1,11 +1,9 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+book:
+  user: user
+  title: My Book Title
+  body: My book body
 
-one:
-  user: one
-  title: MyString
-  body: MyText
-
-two:
-  user: two
-  title: MyString
-  body: MyText
+second_book:
+  user: user
+  title: My Second Book
+  body: Second book body

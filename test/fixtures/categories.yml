@@ -1,7 +1,5 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+category:
+  name: My category
 
-one:
-  name: MyString
-
-two:
-  name: MyString
+another_category:
+  name: Another category

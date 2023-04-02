@@ -1,7 +1,7 @@
 require "test_helper"
 
 class BookCategoryTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+  test "valid fixture" do
+    assert_valid_fixture book_categories
+  end
 end

@@ -1,9 +1,5 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+comment_on_book:
+  commentable: book (Book)
 
-one:
-  commentable: one
-  commentable_type: Commentable
-
-two:
-  commentable: two
-  commentable_type: Commentable
+comment_on_user:
+  commentable: user (User)
