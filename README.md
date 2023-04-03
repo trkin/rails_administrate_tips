@@ -49,6 +49,12 @@ or layout
 rails g administrate:views:layout
 rails g administrate:views:navigation # only this partial
 ```
+or field attribute partials
+```
+rails generate administrate:views:field number
+```
+or you can create new field
+https://administrate-demo.herokuapp.com/adding_custom_field_types
 
 * overwrite display name
   ```
