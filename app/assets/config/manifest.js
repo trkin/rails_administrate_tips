@@ -2,3 +2,8 @@
 //= link_directory ../stylesheets .css
 //= link_tree ../../javascript .js
 //= link_tree ../../../vendor/javascript .js
+//= link administrate-field-active_storage/application.css
+//= link administrate-field-trix/application.css
+//= link administrate-field-trix/application.js
+//= link administrate-field-nested_has_many/application.css
+//= link administrate-field-nested_has_many/application.js

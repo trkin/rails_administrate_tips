@@ -15,6 +15,8 @@ class BookDashboard < Administrate::BaseDashboard
     user: Field::BelongsTo,
     created_at: Field::DateTime,
     updated_at: Field::DateTime,
+    attachment: Field::ActiveStorage,
+    content: Field::Trix
   }.freeze
 
   # COLLECTION_ATTRIBUTES
@@ -32,11 +34,12 @@ class BookDashboard < Administrate::BaseDashboard
   # SHOW_PAGE_ATTRIBUTES
   # an array of attributes that will be displayed on the model's show page.
   SHOW_PAGE_ATTRIBUTES = %i[
-    id
+    user
+    title
     body
     book_categories
-    title
-    user
+    attachment
+    content
     created_at
     updated_at
   ].freeze
@@ -45,10 +48,11 @@ class BookDashboard < Administrate::BaseDashboard
   # an array of attributes that will be displayed
   # on the model's form (`new` and `edit`) pages.
   FORM_ATTRIBUTES = %i[
+    title
     body
     book_categories
-    title
-    user
+    attachment
+    content
   ].freeze
 
   FORM_ATTRIBUTES_REGISTER = %i[

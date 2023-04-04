@@ -30,7 +30,6 @@ class BookCategoryDashboard < Administrate::BaseDashboard
   # SHOW_PAGE_ATTRIBUTES
   # an array of attributes that will be displayed on the model's show page.
   SHOW_PAGE_ATTRIBUTES = %i[
-    id
     book
     category
     created_at
@@ -60,7 +59,7 @@ class BookCategoryDashboard < Administrate::BaseDashboard
   # Overwrite this method to customize how book categories are displayed
   # across all pages of the admin dashboard.
   #
-  # def display_resource(book_category)
-  #   "BookCategory ##{book_category.id}"
-  # end
+  def display_resource(book_category)
+    book_category.category&.name
+  end
 end
