@@ -41,8 +41,8 @@ You can overwrite specific views
 
 ```
 rails g administrate:views
-rails g administrate:views:index # index show edit  new
-rails g administrate:views:index Candidate # only for specific resource
+rails g administrate:views:index # index show edit new # new and edit (also generate _form)
+rails g administrate:views:index candidate # only for specific resource
 ```
 or layout
 ```
@@ -192,6 +192,32 @@ we need to overwrite show with `field.data.to_s`
 <%= sanitize(field.data.to_s, attributes: %w(style)) %>
 ```
 
+## Shallow resources
+
+It does not support nester resources
+https://github.com/thoughtbot/administrate/issues/1946
+since you need to override paths to include nested resource.
+It is easier with root level resource and pass the parameter
+```
+# app/views/admin/books/show.html.erb
+    <%= link_to(
+      "Add review",
+      new_admin_review_path(book_id: page.resource),
+      class: "button",
+    ) if accessible_action?(page.resource, :edit) %>
+
+# app/controllers/admin/reviews_controller.rb
+    # https://github.com/thoughtbot/administrate/blob/main/app/controllers/administrate/application_controller.rb#L270
+    def new_resource
+      resource_class.new book: Book.find(params[:book_id])
+    end
+
+    def after_resource_created_path(requested_resource)
+      [namespace, requested_resource.book]
+    end
+```
+
+
 ## Paper trail
 
 https://github.com/IrvanFza/administrate-field-paper_trail
@@ -324,6 +350,17 @@ should copy default show view)
 # app/views/admin/books/show.html.erb
 <%= link_to "Manage categories", [:manage_categories, namespace, page.resource] %>
 ```
+
+## Labels
+
+Administrate uses locales in their views
+<https://github.com/thoughtbot/administrate/blob/main/config/locales/administrate.en.yml>
+
+```
+# app/views/admin/books/show.html.erb
+      t("administrate.actions.edit_resource", name: page.page_title),
+```
+`page_title` is dashboard [display_resource](https://github.com/thoughtbot/administrate/blob/main/lib/administrate/page/show.rb#L13)
 
 TODO:
 https://github.com/ApprenticeshipStandardsDotOrg/ApprenticeshipStandardsDotOrg

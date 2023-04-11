@@ -1,6 +1,6 @@
 require "administrate/base_dashboard"
 
-class BookDashboard < Administrate::BaseDashboard
+class ReviewDashboard < Administrate::BaseDashboard
   # ATTRIBUTE_TYPES
   # a hash that describes the type of each of the model's fields.
   #
@@ -9,18 +9,10 @@ class BookDashboard < Administrate::BaseDashboard
   # on pages throughout the dashboard.
   ATTRIBUTE_TYPES = {
     id: Field::Number,
-    body: Field::Text,
-    reviews: Field::HasMany,
-    book_categories: Field::HasMany,
-    categories_array: MultipleSelectFieldField.with_options(
-      collection: ["A", "B"]
-    ),
-    title: Field::String,
-    user: Field::BelongsTo,
+    body: Field::String,
+    book: Field::BelongsTo,
     created_at: Field::DateTime,
     updated_at: Field::DateTime,
-    attachment: Field::ActiveStorage,
-    content: Field::Trix
   }.freeze
 
   # COLLECTION_ATTRIBUTES
@@ -29,25 +21,16 @@ class BookDashboard < Administrate::BaseDashboard
   # By default, it's limited to four items to reduce clutter on index pages.
   # Feel free to add, remove, or rearrange items.
   COLLECTION_ATTRIBUTES = %i[
-    id
     body
-    book_reviews
-    book_categories
-    categories_array
-    title
+    book
+    created_at
   ].freeze
 
   # SHOW_PAGE_ATTRIBUTES
   # an array of attributes that will be displayed on the model's show page.
   SHOW_PAGE_ATTRIBUTES = %i[
-    user
-    title
+    book
     body
-    reviews
-    book_categories
-    categories_array
-    attachment
-    content
     created_at
     updated_at
   ].freeze
@@ -56,18 +39,9 @@ class BookDashboard < Administrate::BaseDashboard
   # an array of attributes that will be displayed
   # on the model's form (`new` and `edit`) pages.
   FORM_ATTRIBUTES = %i[
-    title
+    book_id
     body
-    reviews
-    book_categories
-    categories_array
-    attachment
-    content
   ].freeze
-
-  FORM_ATTRIBUTES_REGISTER = %i[
-    status
-  ]
 
   # COLLECTION_FILTERS
   # a hash that defines filters that can be used while searching via the search
@@ -81,10 +55,10 @@ class BookDashboard < Administrate::BaseDashboard
   #   }.freeze
   COLLECTION_FILTERS = {}.freeze
 
-  # Overwrite this method to customize how books are displayed
+  # Overwrite this method to customize how reviews are displayed
   # across all pages of the admin dashboard.
   #
-  def display_resource(book)
-    book.title
-  end
+  # def display_resource(review)
+  #   "Review ##{review.id}"
+  # end
 end

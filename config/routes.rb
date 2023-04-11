@@ -8,6 +8,7 @@ Rails.application.routes.draw do
         get :manage_categories
       end
     end
+    resources :reviews
     resources :comments
     resources :categories
     resources :book_categories, except: :index
