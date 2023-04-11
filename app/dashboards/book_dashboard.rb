@@ -11,6 +11,9 @@ class BookDashboard < Administrate::BaseDashboard
     id: Field::Number,
     body: Field::Text,
     book_categories: Field::HasMany,
+    categories_array: MultipleSelectFieldField.with_options(
+      collection: ["A", "B"]
+    ),
     title: Field::String,
     user: Field::BelongsTo,
     created_at: Field::DateTime,
@@ -28,6 +31,7 @@ class BookDashboard < Administrate::BaseDashboard
     id
     body
     book_categories
+    categories_array
     title
   ].freeze
 
@@ -38,6 +42,7 @@ class BookDashboard < Administrate::BaseDashboard
     title
     body
     book_categories
+    categories_array
     attachment
     content
     created_at
@@ -51,6 +56,7 @@ class BookDashboard < Administrate::BaseDashboard
     title
     body
     book_categories
+    categories_array
     attachment
     content
   ].freeze

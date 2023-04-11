@@ -40,7 +40,19 @@ module Admin
     #     transform_values { |value| value == "" ? nil : value }
     # end
 
-    # See https://administrate-prototype.herokuapp.com/customizing_controller_actions
-    # for more information
+    def publish
+      requested_resource.title = " published #{Time.zone.now}"
+      requested_resource.save
+      # redirect_to [namespace, requested_resource]
+      redirect_to admin_book_path requested_resource
+    end
+
+    def manage_categories
+      # call show method to render partial with "page" locals
+      # render locals: {
+      #   page: Administrate::Page::Show.new(dashboard, requested_resource),
+      # }
+      show
+    end
   end
 end
