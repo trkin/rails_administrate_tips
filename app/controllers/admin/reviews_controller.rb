@@ -42,5 +42,14 @@ module Admin
 
     # See https://administrate-prototype.herokuapp.com/customizing_controller_actions
     # for more information
+
+    # https://github.com/thoughtbot/administrate/blob/main/app/controllers/administrate/application_controller.rb#L270
+    def new_resource
+      resource_class.new book: Book.find(params[:book_id])
+    end
+
+    def after_resource_created_path(requested_resource)
+      [namespace, requested_resource.book]
+    end
   end
 end
