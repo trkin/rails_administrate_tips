@@ -51,7 +51,8 @@ rails g administrate:views:navigation # only this partial
 ```
 or field attribute partials
 ```
-rails generate administrate:views:field number
+rails g administrate:views:field number
+rails g administrate:views:field has_many
 ```
 * overwrite display name
   ```
@@ -61,6 +62,58 @@ rails generate administrate:views:field number
   end
   ```
 * change labels using I18n <https://administrate-demo.herokuapp.com/customizing_dashboards>
+
+## Shallow resources
+
+It does not support nester resources
+https://github.com/thoughtbot/administrate/issues/1946
+since you need to override paths to include nested resource link.
+It is easier with root level resource and pass the parameter
+```
+# app/views/admin/books/show.html.erb
+    <%= link_to(
+      "Add review",
+      new_admin_review_path(book_id: page.resource),
+      class: "button",
+    ) if accessible_action?(page.resource, :edit) %>
+
+# app/controllers/admin/reviews_controller.rb
+    # https://github.com/thoughtbot/administrate/blob/main/app/controllers/administrate/application_controller.rb#L270
+    def new_resource
+      resource_class.new book: Book.find_by(id: params[:book_id])
+    end
+
+    def after_resource_destroyed_path(_requested_resource)
+      [namespace, requested_resource.book]
+    end
+
+    def after_resource_created_path(requested_resource)
+      [namespace, requested_resource.book]
+    end
+
+    def after_resource_updated_path(requested_resource)
+      [namespace, requested_resource.book]
+    end
+
+    # To disable certain actions, for example remove show link you can define
+    def authorized_action?(resource, action)
+      %w[new create edit update destroy].include? action.to_s
+    end
+```
+Note that if you want to disable show link on small table for HasMany field you
+need to overrite authorized_action on that controller
+
+```
+# app/controllers/admin/books_controller.rb
+    def authorized_action?(resource, action)
+      case resource
+      when Review
+        %w[new create edit update destroy].include? action.to_s
+      else
+        true
+      end
+    end
+```
 
 ## Advance fields
 
@@ -192,32 +245,6 @@ we need to overwrite show with `field.data.to_s`
 <%= sanitize(field.data.to_s, attributes: %w(style)) %>
 ```
 
-## Shallow resources
-
-It does not support nester resources
-https://github.com/thoughtbot/administrate/issues/1946
-since you need to override paths to include nested resource.
-It is easier with root level resource and pass the parameter
-```
-# app/views/admin/books/show.html.erb
-    <%= link_to(
-      "Add review",
-      new_admin_review_path(book_id: page.resource),
-      class: "button",
-    ) if accessible_action?(page.resource, :edit) %>
-
-# app/controllers/admin/reviews_controller.rb
-    # https://github.com/thoughtbot/administrate/blob/main/app/controllers/administrate/application_controller.rb#L270
-    def new_resource
-      resource_class.new book: Book.find(params[:book_id])
-    end
-
-    def after_resource_created_path(requested_resource)
-      [namespace, requested_resource.book]
-    end
-```
-
-
 ## Paper trail
 
 https://github.com/IrvanFza/administrate-field-paper_trail
@@ -234,7 +261,6 @@ Similar to basic
 [Field::HasMany](https://administrate-demo.herokuapp.com/customizing_dashboards)
 we can use NestedHasMany to create nested resources
 <https://github.com/nickcharlton/administrate-field-nested_has_many>
-
 ```
 # Gemfile
 gem "administrate-field-nested_has_many"

@@ -54,5 +54,14 @@ module Admin
       # }
       show
     end
+
+    def authorized_action?(resource, action)
+      case resource
+      when Review
+        %w[new create edit update destroy].include? action.to_s
+      else
+        true
+      end
+    end
   end
 end

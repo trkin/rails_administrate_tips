@@ -22,8 +22,6 @@ class ReviewDashboard < Administrate::BaseDashboard
   # Feel free to add, remove, or rearrange items.
   COLLECTION_ATTRIBUTES = %i[
     body
-    book
-    created_at
   ].freeze
 
   # SHOW_PAGE_ATTRIBUTES
@@ -39,7 +37,7 @@ class ReviewDashboard < Administrate::BaseDashboard
   # an array of attributes that will be displayed
   # on the model's form (`new` and `edit`) pages.
   FORM_ATTRIBUTES = %i[
-    book_id
+    book
     body
   ].freeze
 

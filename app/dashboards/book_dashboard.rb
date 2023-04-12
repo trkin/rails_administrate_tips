@@ -31,7 +31,7 @@ class BookDashboard < Administrate::BaseDashboard
   COLLECTION_ATTRIBUTES = %i[
     id
     body
-    book_reviews
+    reviews
     book_categories
     categories_array
     title
