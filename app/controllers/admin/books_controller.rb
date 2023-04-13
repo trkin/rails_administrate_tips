@@ -56,12 +56,11 @@ module Admin
     end
 
     def authorized_action?(resource, action)
-      case resource
-      when Review
-        %w[new create edit update destroy].include? action.to_s
-      else
-        true
-      end
+      return true if resource.instance_of? resource_class # all actions for this resource
+      return true if resource.instance_of? Class # all actions ie index for other classes like User
+
+      # For nested resources (like comment) do not allow show and index
+      %w[new create edit update destroy].include? action.to_s
     end
   end
 end

@@ -40,7 +40,7 @@ as well as a link to its edit page.
 
     <%= link_to(
       "Add review",
-      new_admin_review_path(book_id: page.resource),
+      [:new, namespace, :review, book_id: page.resource.id],
       class: "button",
     ) if accessible_action?(page.resource, :edit) %>
 

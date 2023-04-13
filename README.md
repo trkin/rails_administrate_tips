@@ -65,40 +65,53 @@ rails g administrate:views:field has_many
 
 ## Shallow resources
 
-It does not support nester resources
+It does not support nested resources
 https://github.com/thoughtbot/administrate/issues/1946
 since you need to override paths to include nested resource link.
-It is easier with root level resource and pass the parameter
+It is easier with root level resource and pass the parameter book_id
+You can also use concern `BookNestedable` (rename with your own model)
 ```
+rails g administrate:views:show books
+
 # app/views/admin/books/show.html.erb
     <%= link_to(
       "Add review",
-      new_admin_review_path(book_id: page.resource),
+      [:new, namespace, :review, book_id: page.resource.id],
       class: "button",
-    ) if accessible_action?(page.resource, :edit) %>
+    ) if accessible_action?(:review, :new) %>
+    # new_admin_review_path(book_id: page.resource),
 
 # app/controllers/admin/reviews_controller.rb
-    # https://github.com/thoughtbot/administrate/blob/main/app/controllers/administrate/application_controller.rb#L270
-    def new_resource
-      resource_class.new book: Book.find_by(id: params[:book_id])
-    end
+  include BookNestedable
 
-    def after_resource_destroyed_path(_requested_resource)
-      [namespace, requested_resource.book]
-    end
+# app/dashboards/review_dashboard.rb
+# make sure you add :book to FORM_ATTRIBUTES
 
-    def after_resource_created_path(requested_resource)
-      [namespace, requested_resource.book]
-    end
+# app/controllers/concerns/book_nestedable.rb
+module BookNestedable
+  extend ActiveSupport::Concern
 
-    def after_resource_updated_path(requested_resource)
-      [namespace, requested_resource.book]
-    end
+  # https://github.com/thoughtbot/administrate/blob/main/app/controllers/administrate/application_controller.rb#L270
+  def new_resource
+    resource_class.new book: Book.find_by(id: params[:book_id])
+  end
 
-    # To disable certain actions, for example remove show link you can define
-    def authorized_action?(resource, action)
-      %w[new create edit update destroy].include? action.to_s
-    end
+  def after_resource_destroyed_path(requested_resource)
+    [namespace, requested_resource.book]
+  end
+
+  def after_resource_created_path(requested_resource)
+    [namespace, requested_resource.book]
+  end
+
+  def after_resource_updated_path(requested_resource)
+    [namespace, requested_resource.book]
+  end
+
+  def authorized_action?(resource, action)
+    %w[new create edit update destroy].include? action.to_s
+  end
+end
 ```
 Note that if you want to disable show link on small table for HasMany field you
 need to overrite authorized_action on that controller
@@ -106,14 +119,19 @@ need to overrite authorized_action on that controller
 ```
 # app/controllers/admin/books_controller.rb
     def authorized_action?(resource, action)
-      case resource
-      when Review
-        %w[new create edit update destroy].include? action.to_s
-      else
-        true
-      end
+      return true if resource.instance_of? Class # all actions ie index for other classes like User
+      return true if resource.instance_of? resource_class # all actions for this resource
+
+      # For nested resources (like comment) do not allow show and index
+      %w[new create edit update destroy].include? action.to_s
     end
 ```
+
+To render show on form is not easy since you need to create new page instance
+which needs dashabord which uses resolver and it is not available as
+helper_method
+https://github.com/thoughtbot/administrate/blob/main/app/controllers/administrate/application_controller.rb#L226
+
 
 ## Advance fields
 
